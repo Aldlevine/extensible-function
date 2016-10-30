@@ -1,0 +1,30 @@
+{
+  "name": "extensible-function",
+  "version": "1.0.0",
+  "description": "An extensible ES6 function with idiomatic inheritance and various other benifits",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aldlevine/extensible-function.git"
+  },
+  "keywords": [
+    "ES6",
+    "Function",
+    "OOP",
+    "Extend",
+    "Class",
+    "Inheritance"
+  ],
+  "author": "Aaron Levine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aldlevine/extensible-function/issues"
+  },
+  "homepage": "https://github.com/Aldlevine/extensible-function#readme",
+  "devDependencies": {
+    "mocha": "^3.1.2"
+  }
+}
