@@ -1,6 +1,6 @@
 {
   "name": "extensible-function",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "An extensible ES6 function with idiomatic inheritance and various other benifits",
   "main": "index.js",
   "scripts": {
