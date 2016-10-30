@@ -77,13 +77,13 @@ The module also provides a convenient constructor which binds a function to itse
 class BoundExtendedFunction extends ExtensibleFunction.Bound {
   constructor (fn, x) {
     super(fn);
-    this.x = 100;
+    this.x = x;
   }
 }
 
 let bfn = new BoundExtendedFunction(function(y){
   return this.x + y;
-});
+}, 100);
 
 bfn(42); // 142
 bfn.x = 0;
