@@ -90,3 +90,91 @@ describe('ExtensibleFunction', ()=>{
     });
   });
 });
+
+class BoundExtendedFunction extends ExtensibleFunction.Bound {
+  constructor (fn, ...args) {
+    super(fn, ...args);
+    let [constructedPropertyValue, ...rest] = args;
+    this.constructedProperty = constructedPropertyValue;
+    this.y = 100;
+  }
+}
+
+let bfn = new BoundExtendedFunction(function (x) {
+  return (this.y>>0) + (x>>0)
+}, CONSTRUCTED_PROPERTY_VALUE);
+
+bfn.additionalProperty = ADDITIONAL_PROPERTY_VALUE;
+
+describe('BoundExtensibleFunction', ()=>{
+  describe('instanceof', ()=>{
+    it('should be an instance of Function', ()=>{
+      assert(bfn instanceof Function);
+    });
+    it('should be an instance of ExtensibleFunction', ()=>{
+      assert(bfn instanceof ExtensibleFunction.Bound);
+    });
+    it('should be an instance of ExtendedFunction', ()=>{
+      assert(bfn instanceof BoundExtendedFunction);
+    });
+  });
+
+  describe('properties', ()=>{
+    it('constructed property should be set from constructor', ()=>{
+      assert.equal(bfn.constructedProperty, CONSTRUCTED_PROPERTY_VALUE);
+    });
+    it('additional property should be set outside constructor', ()=>{
+      assert.equal(bfn.additionalProperty, ADDITIONAL_PROPERTY_VALUE);
+    });
+    describe('#bind()', ()=>{
+      it('constructed property should be carried from original to bound function', ()=>{
+        assert.equal(bfn.constructedProperty, fn.bind().constructedProperty);
+      });
+      it('additional property should be carried from original to bound function', ()=>{
+        assert.equal(bfn.additionalProperty, fn.bind().additionalProperty);
+      });
+    });
+  });
+
+  describe('execution', ()=>{
+    it('function calls should return expected values', ()=>{
+      assert.equal(bfn(), 100);
+      assert.equal(bfn(10), 110);
+    });
+  });
+
+  describe('#apply()', ()=>{
+    it('applied function should retain bound context but pass arguments', ()=>{
+      assert.equal(bfn.apply({y:10}, [10]), 110);
+    });
+  });
+
+  describe('#call()', ()=>{
+    it('applied function should retain bound context but pass arguments', ()=>{
+      assert.equal(bfn.call({y:10}, 20), 120);
+    });
+  });
+
+  describe('#bind()', ()=>{
+    it('should retain the original bound context', ()=>{
+      assert.equal(bfn.bind({y:30})(10), 110);
+    });
+    describe('instanceof', ()=>{
+      it('fn.bind() should be an instance of Function', ()=>{
+        assert(bfn.bind() instanceof Function);
+      });
+      it('fn.bind() should be an instance of BoundExtensibleFunction', ()=>{
+        assert(bfn.bind() instanceof ExtensibleFunction.Bound);
+      });
+      it('fn.bind() should be an instance of BoundExtendedFunction', ()=>{
+        assert(bfn.bind() instanceof BoundExtendedFunction);
+      });
+    });
+    describe('execution', ()=>{
+      it('bound function should retain bound context but pass arguments', ()=>{
+        assert.equal(bfn.bind({y:30})(10), 110);
+        assert.equal(bfn.bind({y:30}, 20)(), 120);
+      });
+    });
+  });
+});

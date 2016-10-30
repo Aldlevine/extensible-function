@@ -15,8 +15,14 @@ npm install --save extensible-function
  - Closures are honored, and arrow functions continue to maintain the proper context.
  - The "inner" function is stored via a `Symbol`, which is obfuscated by the module.
 
+## ExtensibleFunction
+
 #### Example of extending `ExtensibleFunction`
 ```javascript
+const ExtensibleFunction = require('extensible-function');
+// OR //
+import ExtensibleFunction from 'extensible-function';
+
 // Lets extend our `ExtensibleFunction` into an `ExtendedFunction`
 class ExtendedFunction extends ExtensibleFunction {
   constructor (fn, ...args) {
@@ -60,4 +66,26 @@ fn(10) == 10; //true
 fn.apply({y:10}, [10]) == 20; //true
 fn.call({y:10}, 20) == 30; //true
 fn.bind({y:30})(10) == 40; //true
+```
+
+## ExtensibleFunction.Bound
+
+The module also provides a convenient constructor which binds a function to itself. Yeah, it sounds weird but the benefit is that calls to these functions have their `this` set to themselves.
+
+#### Example of using ExtensibleFunction.Bound
+```javascript
+class BoundExtendedFunction extends ExtensibleFunction.Bound {
+  constructor (fn, x) {
+    super(fn);
+    this.x = 100;
+  }
+}
+
+let bfn = new BoundExtendedFunction(function(y){
+  return this.x + y;
+});
+
+bfn(42); // 142
+bfn.x = 0;
+bfn(42); // 42
 ```
